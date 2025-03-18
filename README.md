@@ -16,3 +16,10 @@ To build and run, do the following
 
 # Extra information
 I usually stick to a strictly object oriented approach style but for this little experimentation I decided to do a more C style while using C++ features I want. I tried my best to stick to best practices, but also, I'm simply learning and having fun so take it with a grain of salt. I hope you enjoy!
+
+# Changes
+Implemented proper camera movement functionality
+1. W/S move forward backward along z axis
+2. A/D move along x axis
+3. Up and Down arrows, move along the y axis
+4. Left and Right arrows, move cubes along the x axis

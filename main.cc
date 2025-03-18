@@ -11,6 +11,8 @@
 
 void FreePointers(std::vector<struct Entity*>& entities);
 void CheckEntityCollisions(std::vector<struct Entity*>& entities);
+void SetupCamera(Camera3D& camera);
+void MoveCamera(Camera3D& camera, float dt);
 
 int main(void)
 {
@@ -60,11 +62,7 @@ int main(void)
 
     // setup the camera
     Camera3D camera = { 0 };
-    camera.position = (Vector3){ 0.0f, 10.0f, 10.0f }; // Move camera back
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };     // Look at origin
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
-    camera.fovy = 45.0f;
-    camera.projection = CAMERA_PERSPECTIVE;
+    SetupCamera(camera);
 
     float delta_time;
     float rotation_angle1 = 0.0f;
@@ -106,6 +104,9 @@ int main(void)
         MoveCubeLeftRight(cube1, delta_time);
         MoveCubeLeftRight(cube2, delta_time);
         MoveCubeLeftRight(cube3, delta_time);
+
+        // Move the camera
+        MoveCamera(camera, delta_time);
 
         // 3D rendering for a rotating cube
         BeginMode3D(camera);
@@ -169,3 +170,57 @@ void CheckEntityCollisions(std::vector<struct Entity*>& entities)
         }
     }
 }
+
+void SetupCamera(Camera3D& camera)
+{
+    camera.position = (Vector3){ 0.0f, 5.0f, 10.0f }; // Move camera back
+    camera.target = (Vector3){ 0.0f, -0.5f, 0.0f };     // Look at target pos
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
+    camera.fovy = 45.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
+}
+
+void MoveCamera(Camera3D& camera, float dt)
+{
+    float move_speed = 5.0f * dt;     // Movement speed
+
+    // Forward movement (W/S)
+    Vector3 forward = Vector3Normalize(Vector3Subtract(camera.target, camera.position));
+
+    if (IsKeyDown(KEY_A))
+    {
+        camera.position.x -= move_speed;
+    }
+
+    if (IsKeyDown(KEY_D))
+    {
+        camera.position.x += move_speed;
+    }
+
+    if (IsKeyDown(KEY_UP))
+    {
+        camera.position.y -= move_speed;
+    }
+
+    if (IsKeyDown(KEY_DOWN))
+    {
+        camera.position.y += move_speed;
+    }
+
+    if (IsKeyDown(KEY_W))
+    {
+        camera.position = Vector3Subtract(camera.position, Vector3Scale(forward, move_speed));
+        camera.target = Vector3Subtract(camera.target, Vector3Scale(forward, move_speed));
+    }
+
+    if (IsKeyDown(KEY_S))
+    {
+        camera.position = Vector3Add(camera.position, Vector3Scale(forward, move_speed));
+        camera.target = Vector3Add(camera.target, Vector3Scale(forward, move_speed));
+    }
+
+    // Ensure the camera still looks at the target
+    // camera.up = (Vector3){0.0f, 1.5f, 0.0f};
+}
+
+

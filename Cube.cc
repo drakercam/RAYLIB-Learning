@@ -28,12 +28,12 @@ void DrawRotatingCube(struct Cube* cube, float angle)
 
 void MoveCubeLeftRight(struct Cube* cube, float dt)
 {
-    if (IsKeyDown(KEY_A))
+    if (IsKeyDown(KEY_LEFT))
     {
         cube->position.x -= 2.0f * dt;
     }
 
-    if (IsKeyDown(KEY_D))
+    if (IsKeyDown(KEY_RIGHT))
     {
         cube->position.x += 2.0f * dt;
     }
