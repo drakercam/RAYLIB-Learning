@@ -23,3 +23,4 @@ Implemented proper camera movement functionality
 2. A/D move along x axis
 3. Up and Down arrows, move along the y axis
 4. Left and Right arrows, move cubes along the x axis
+5. Removed unwanted code and added a button press for R to reset the camera to its default position if wanted.

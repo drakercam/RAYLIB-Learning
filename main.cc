@@ -13,11 +13,10 @@ void FreePointers(std::vector<struct Entity*>& entities);
 void CheckEntityCollisions(std::vector<struct Entity*>& entities);
 void SetupCamera(Camera3D& camera);
 void MoveCamera(Camera3D& camera, float dt);
+void CameraReset(Camera& camera);
 
 int main(void)
 {
-    std::cout << "Raylib and Raygui project" << std::endl;
-
     InitWindow(1280, 720, "Raylib and Raygui project");
     SetTargetFPS(120);       // set the fps to 120
 
@@ -107,6 +106,12 @@ int main(void)
 
         // Move the camera
         MoveCamera(camera, delta_time);
+
+        // check for input to reset camera
+        if (IsKeyDown(KEY_R))
+        {
+            CameraReset(camera);
+        }
 
         // 3D rendering for a rotating cube
         BeginMode3D(camera);
@@ -209,18 +214,24 @@ void MoveCamera(Camera3D& camera, float dt)
 
     if (IsKeyDown(KEY_W))
     {
-        camera.position = Vector3Subtract(camera.position, Vector3Scale(forward, move_speed));
-        camera.target = Vector3Subtract(camera.target, Vector3Scale(forward, move_speed));
-    }
-
-    if (IsKeyDown(KEY_S))
-    {
         camera.position = Vector3Add(camera.position, Vector3Scale(forward, move_speed));
         camera.target = Vector3Add(camera.target, Vector3Scale(forward, move_speed));
     }
 
-    // Ensure the camera still looks at the target
-    // camera.up = (Vector3){0.0f, 1.5f, 0.0f};
+    if (IsKeyDown(KEY_S))
+    {
+        camera.position = Vector3Subtract(camera.position, Vector3Scale(forward, move_speed));
+        camera.target = Vector3Subtract(camera.target, Vector3Scale(forward, move_speed));
+    }
+}
+
+void CameraReset(Camera& camera)
+{
+    camera.position = (Vector3){ 0.0f, 5.0f, 10.0f }; // Move camera back
+    camera.target = (Vector3){ 0.0f, -0.5f, 0.0f };     // Look at target pos
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
+    camera.fovy = 45.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
 }
 
 
